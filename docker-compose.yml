@@ -1,0 +1,44 @@
+services:
+  spx-gc:
+    build: .
+    image: spx-gc:latest
+    container_name: spx-gc
+    restart: unless-stopped
+    ports:
+      - "5656:5656"
+      - "57121:57121/udp"
+    volumes:
+      - spx-dataroot:/app/DATAROOT
+      - spx-assets:/app/ASSETS
+      - spx-log:/app/LOG
+
+  samba:
+    image: ghcr.io/servercontainers/samba@sha256:b11a221d8c636691b93f2ef9563b30346a19be4216c29b4c3dbaef4ba64ff134
+    container_name: spx-gc-samba
+    restart: unless-stopped
+    ports:
+      - "445:445"
+      - "139:139"
+    environment:
+      # SMB user account. Set SMB_PASSWORD in .env before first run.
+      ACCOUNT_spxassets: ${SMB_PASSWORD:?Set SMB_PASSWORD in .env before running}
+      # Share definition: name; path; browsable; read-only; guest-ok; valid-users
+      SAMBA_VOLUME_CONFIG_assets: >-
+        [assets];
+        path = /shares/assets;
+        browsable = yes;
+        read only = no;
+        guest ok = no;
+        valid users = spxassets;
+        create mask = 0664;
+        directory mask = 0775
+      SAMBA_CONF_SERVER_STRING: SPX Graphics Controller Assets
+      # Disable avahi (mDNS) — Windows discovery works via wsdd2
+      AVAHI_DISABLE: "1"
+    volumes:
+      - spx-assets:/shares/assets
+
+volumes:
+  spx-dataroot:
+  spx-assets:
+  spx-log:
