@@ -1,0 +1,18 @@
+services:
+  spx-gc:
+    build: .
+    image: spx-gc:latest
+    container_name: spx-gc
+    restart: unless-stopped
+    ports:
+      - "5656:5656"
+      - "57121:57121/udp"
+    volumes:
+      - spx-dataroot:/app/DATAROOT
+      - spx-assets:/app/ASSETS
+      - spx-log:/app/LOG
+
+volumes:
+  spx-dataroot:
+  spx-assets:
+  spx-log:
