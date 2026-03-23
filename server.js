@@ -905,11 +905,14 @@ var server = app.listen(port, (err) => {
 
   if ( config.general.launchBrowser || global.generatingDefaultConfig ) {
     try {
-      (async () => {
-        require("openurl").open(`http://${ipad}:${port}/`)
-      })();
+      const cp = require("openurl").open(`http://${ipad}:${port}/`);
+      if (cp) {
+        cp.on('error', () => {
+          // Ignore - browser may not be available (e.g. Docker/headless)
+        });
+      }
     } catch (error) {
-      console.warn('Could not open browser.')
+      // ignore - browser opening is best-effort
     }
   }
 
