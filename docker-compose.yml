@@ -17,7 +17,9 @@ services:
     container_name: spx-gc-samba
     restart: unless-stopped
     ports:
-      - "3445:445"
+      # Windows requires SMB on port 445; override with SMB_PORT in .env
+      # if the host already runs Samba (see .env.example for details).
+      - "${SMB_PORT:-445}:445"
     environment:
       # SMB user account. Set SMB_PASSWORD in .env before first run.
       ACCOUNT_spxassets: ${SMB_PASSWORD:?Set SMB_PASSWORD in .env before running}
