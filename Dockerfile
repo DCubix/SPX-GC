@@ -14,9 +14,6 @@ RUN npm ci --omit=dev
 # Copy application source
 COPY . .
 
-# Create data directories
-RUN mkdir -p DATAROOT LOG ASSETS
-
 # Expose HTTP and OSC ports
 EXPOSE 5656
 EXPOSE 57121/udp

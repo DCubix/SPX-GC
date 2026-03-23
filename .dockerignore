@@ -2,10 +2,3 @@ node_modules/
 npm-debug.log*
 .git/
 .gitignore
-*.log
-*.env
-*.md
-screenshots/
-notes/
-zip_builds/
-pkg-builds/
