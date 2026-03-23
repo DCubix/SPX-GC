@@ -13,7 +13,7 @@ services:
       - spx-log:/app/LOG
 
   samba:
-    image: ghcr.io/servercontainers/samba@sha256:b11a221d8c636691b93f2ef9563b30346a19be4216c29b4c3dbaef4ba64ff134
+    image: ghcr.io/servercontainers/samba:latest
     container_name: spx-gc-samba
     restart: unless-stopped
     ports:
