@@ -9,35 +9,12 @@ services:
       - "57121:57121/udp"
     volumes:
       - spx-dataroot:/app/DATAROOT
-      - spx-assets:/app/ASSETS
+      # Bind-mount ASSETS to a host directory so that the host's existing
+      # Samba (or any other file-sharing service) can expose it directly.
+      # Set ASSETS_PATH in .env — see .env.example for details.
+      - ${ASSETS_PATH:?Set ASSETS_PATH in .env before running}:/app/ASSETS
       - spx-log:/app/LOG
-
-  samba:
-    image: ghcr.io/servercontainers/samba:latest
-    container_name: spx-gc-samba
-    restart: unless-stopped
-    ports:
-      - "3445:445"
-    environment:
-      # SMB user account. Set SMB_PASSWORD in .env before first run.
-      ACCOUNT_spxassets: ${SMB_PASSWORD:?Set SMB_PASSWORD in .env before running}
-      # Share definition: name; path; browsable; read-only; guest-ok; valid-users
-      SAMBA_VOLUME_CONFIG_assets: >-
-        [assets];
-        path = /shares/assets;
-        browsable = yes;
-        read only = no;
-        guest ok = no;
-        valid users = spxassets;
-        create mask = 0664;
-        directory mask = 0775
-      SAMBA_CONF_SERVER_STRING: SPX Graphics Controller Assets
-      # Disable avahi (mDNS) — Windows discovery works via wsdd2
-      AVAHI_DISABLE: "1"
-    volumes:
-      - spx-assets:/shares/assets
 
 volumes:
   spx-dataroot:
-  spx-assets:
   spx-log:
