@@ -18,7 +18,6 @@ services:
     restart: unless-stopped
     ports:
       - "445:445"
-      - "139:139"
     environment:
       # SMB user account. Set SMB_PASSWORD in .env before first run.
       ACCOUNT_spxassets: ${SMB_PASSWORD:?Set SMB_PASSWORD in .env before running}
