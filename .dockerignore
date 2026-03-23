@@ -2,9 +2,6 @@ node_modules/
 npm-debug.log*
 .git/
 .gitignore
-LOG/
-DATAROOT/
-ASSETS/
 *.log
 *.env
 *.md
